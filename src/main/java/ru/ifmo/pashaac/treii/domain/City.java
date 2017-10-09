@@ -3,25 +3,25 @@ package ru.ifmo.pashaac.treii.domain;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import ru.ifmo.pashaac.treii.exception.ResourceNotFoundException;
 
-import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Pavel Asadchiy
  * on 22:55 09.10.17.
  */
-@Entity
+//@Entity
 public class City {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String city;
     private String country;
 
     @JsonManagedReference("city-boundingBox")
-    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoundingBox> boundingBoxes = new ArrayList<>();
 
     public City(String city, String country) {
@@ -50,6 +50,11 @@ public class City {
         }
         return boundingBoxes.get(0);
     }
+
+    public void setCityBoundingBox(BoundingBox boundingBox) {
+        boundingBoxes = Collections.singletonList(boundingBox);
+    }
+
 
     @Override
     public String toString() {
