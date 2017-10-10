@@ -28,8 +28,12 @@ public class GeolocationController {
     @RequestMapping
     public City geolocation(@RequestParam double lat, @RequestParam double lng) {
         City city = cityService.geolocation(new Marker(lat, lng));
-        BoundingBox boundingBox = boundingBoxService.geolocation(city);
-        city.setCityBoundingBox(boundingBox);
-        return city;
+        return cityService.findCity(city)
+                .orElseGet(() -> {
+                    BoundingBox cityBoundingBox = boundingBoxService.geolocation(city);
+                    city.setSouthWest(cityBoundingBox.getSouthWest());
+                    city.setNorthEast(cityBoundingBox.getNorthEast());
+                    return cityService.save(city);
+                });
     }
 }

@@ -1,10 +1,12 @@
 package ru.ifmo.pashaac.treii.domain.vo;
 
+import javax.persistence.Embeddable;
+
 /**
  * Created by Pavel Asadchiy
  * on 0:38 10.10.17.
  */
-//@Embeddable
+@Embeddable
 public class Marker {
 
     private double latitude;

@@ -19,6 +19,8 @@ public class BoundingBoxService {
 
     private static final Logger logger = LoggerFactory.getLogger(BoundingBoxService.class);
 
+    private static final long BOUNDING_BOX_MAX_DIAGONAL = 1_000_000;
+
     @Autowired
     private GoogleService googleService;
 

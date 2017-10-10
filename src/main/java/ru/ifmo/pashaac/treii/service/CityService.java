@@ -6,10 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ifmo.pashaac.treii.domain.City;
 import ru.ifmo.pashaac.treii.domain.vo.Marker;
 import ru.ifmo.pashaac.treii.exception.ResourceNotFoundException;
+import ru.ifmo.pashaac.treii.repository.CityRepository;
 import ru.ifmo.pashaac.treii.service.data.google.GoogleService;
+
+import java.util.Optional;
 
 /**
  * Created by Pavel Asadchiy
@@ -22,6 +26,8 @@ public class CityService {
 
     @Autowired
     private GoogleService googleService;
+    @Autowired
+    private CityRepository cityRepository;
 
     public City geolocation(Marker location) {
         GeocodingResult geocoding = googleService.geocoding(location);
@@ -35,6 +41,16 @@ public class CityService {
                         + "(" + location.getLatitude() + ", " + location.getLongitude() + ")"));
         logger.info("Google geolocation method determined city: {}, {}", cityStr, countryStr);
         return new City(cityStr, countryStr);
+    }
+
+    @Transactional
+    public City save(City city) {
+        return cityRepository.save(city);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<City> findCity(City city) {
+        return Optional.ofNullable(cityRepository.findByCityAndCountry(city.getCity(), city.getCountry()));
     }
 
 }

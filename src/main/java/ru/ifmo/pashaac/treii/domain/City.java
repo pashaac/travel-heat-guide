@@ -1,35 +1,50 @@
 package ru.ifmo.pashaac.treii.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import ru.ifmo.pashaac.treii.exception.ResourceNotFoundException;
+import ru.ifmo.pashaac.treii.domain.vo.Marker;
 
+import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Pavel Asadchiy
  * on 22:55 09.10.17.
  */
-//@Entity
+@Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"city", "country"}))
 public class City {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String city;
     private String country;
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "latitude", column = @Column(name = "southWestLatitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "southWestLongitude"))
+    })
+    private Marker southWest;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "latitude", column = @Column(name = "northEastLatitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "northEastLongitude"))
+    })
+    private Marker northEast;
+
     @JsonManagedReference("city-boundingBox")
-//    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoundingBox> boundingBoxes = new ArrayList<>();
+
+    public City() {
+    }
 
     public City(String city, String country) {
         this.city = city;
         this.country = country;
-    }
-
-    public City() {
     }
 
     public String getCity() {
@@ -40,27 +55,19 @@ public class City {
         return country;
     }
 
-    public List<BoundingBox> getBoundingBoxes() {
-        return boundingBoxes;
+    public Marker getSouthWest() {
+        return southWest;
     }
 
-    public BoundingBox getCityBoundingBox() {
-        if (boundingBoxes.isEmpty()) {
-            throw new ResourceNotFoundException("Could not find boundingbox for city: " + city);
-        }
-        return boundingBoxes.get(0);
+    public Marker getNorthEast() {
+        return northEast;
     }
 
-    public void setCityBoundingBox(BoundingBox boundingBox) {
-        boundingBoxes = Collections.singletonList(boundingBox);
+    public void setSouthWest(Marker southWest) {
+        this.southWest = southWest;
     }
 
-
-    @Override
-    public String toString() {
-        return "City{" +
-                "city='" + city + '\'' +
-                ", country='" + country + '\'' +
-                '}';
+    public void setNorthEast(Marker northEast) {
+        this.northEast = northEast;
     }
 }
