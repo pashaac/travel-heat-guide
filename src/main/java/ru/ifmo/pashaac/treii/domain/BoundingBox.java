@@ -1,9 +1,12 @@
 package ru.ifmo.pashaac.treii.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import ru.ifmo.pashaac.treii.domain.vo.Marker;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Pavel Asadchiy
@@ -34,6 +37,10 @@ public class BoundingBox {
     @JsonBackReference("city-boundingBox")
     @ManyToOne(targetEntity = City.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     private City city;
+
+    @JsonManagedReference("boundingBox-venue")
+    @OneToMany(mappedBy = "boundingBox", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Venue> venues = new ArrayList<>();
 
     public BoundingBox() {
     }

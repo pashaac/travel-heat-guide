@@ -31,6 +31,8 @@ dependencies {
     compile('me.atlis:foursquare-api:1.0.6')                        // Foursquare
     compile('com.fasterxml.jackson.core:jackson-annotations:2.9.1') // @JsonManagedReference
 
+    compile files('src/main/resources/geocalc.jar')                 // Math on the Earth | https://github.com/grumlimited/geocalc.git
+
     runtime('org.postgresql:postgresql')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
