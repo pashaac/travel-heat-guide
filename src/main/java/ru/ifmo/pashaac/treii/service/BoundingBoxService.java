@@ -1,14 +1,15 @@
 package ru.ifmo.pashaac.treii.service;
 
-import com.google.maps.model.Bounds;
+import com.grum.geocalc.BoundingArea;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.ifmo.pashaac.treii.domain.BoundingBox;
-import ru.ifmo.pashaac.treii.domain.City;
-import ru.ifmo.pashaac.treii.domain.vo.Marker;
-import ru.ifmo.pashaac.treii.service.data.google.GoogleService;
+import ru.ifmo.pashaac.treii.domain.Venue;
+import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Pavel Asadchiy
@@ -21,11 +22,25 @@ public class BoundingBoxService {
 
     private static final long BOUNDING_BOX_MAX_DIAGONAL = 1_000_000;
 
-    @Autowired
-    private GoogleService googleService;
+    private final GeoMathService geoMathService;
 
-    public BoundingBox geolocation(City city) {
-        Bounds box = googleService.geocoding(city.getCity() + ", " + city.getCountry()).geometry.bounds;
-        return new BoundingBox(new Marker(box.southwest.lat, box.southwest.lng), new Marker(box.northeast.lat, box.northeast.lng));
+    @Autowired
+    public BoundingBoxService(GeoMathService geoMathService) {
+        this.geoMathService = geoMathService;
     }
+
+    public List<BoundingBox> split(BoundingBox boundingBox) {
+        List<BoundingBox> boundingBoxes = new ArrayList<>(4);
+        boundingBoxes.add(geoMathService.leftDownBoundingBox(boundingBox));
+        boundingBoxes.add(geoMathService.leftUpBoundingBox(boundingBox));
+        boundingBoxes.add(geoMathService.rightDownBoundingBox(boundingBox));
+        boundingBoxes.add(geoMathService.rightUpBoundingBox(boundingBox));
+        return boundingBoxes;
+    }
+
+    public boolean contains(BoundingBox boundingBox, Venue venue) {
+        BoundingArea boundingArea = new BoundingArea(geoMathService.point(boundingBox.getSouthWest()), geoMathService.point(boundingBox.getNorthEast()));
+        return boundingArea.isContainedWithin(geoMathService.point(venue.getLocation()));
+    }
+
 }

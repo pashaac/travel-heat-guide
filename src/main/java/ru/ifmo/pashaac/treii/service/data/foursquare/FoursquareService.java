@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import ru.ifmo.pashaac.treii.domain.BoundingBox;
 import ru.ifmo.pashaac.treii.domain.Venue;
-import ru.ifmo.pashaac.treii.domain.foursquare.FoursquarePlaceType;
+import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
+import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -49,24 +49,11 @@ public class FoursquareService {
         return params;
     }
 
-    private Optional<FoursquarePlaceType> getVenueType(CompactVenue venue, String foursquareCategoryIds) {
+    private Optional<PlaceType> getVenueType(CompactVenue venue, String foursquareCategoryIds) {
         return Arrays.stream(venue.getCategories())
                 .filter(category -> foursquareCategoryIds.contains(category.getId()))
-                .map(category -> FoursquarePlaceType.of(category.getId()))
+                .map(category -> PlaceType.of(category.getId()))
                 .filter(Optional::isPresent).map(Optional::get).findAny();
-    }
-
-    private boolean isValidCompactVenueAddress(CompactVenue venue) {
-        String address = venue.getLocation().getAddress();
-        return StringUtils.isEmpty(address) || Character.isUpperCase(address.charAt(0));
-    }
-
-    private boolean isValidCompactVenueCheckins(CompactVenue venue) {
-        return venue.getStats().getCheckinsCount() > MINIMAL_PLACE_CHECKINS_COUNT;
-    }
-
-    private boolean isValidCompactVenueUsers(CompactVenue venue) {
-        return venue.getStats().getUsersCount() > MINIMAL_PLACE_USERS;
     }
 
     public Optional<List<Venue>> search(BoundingBox boundingBox, String foursquareCategoryIds) {
@@ -101,15 +88,12 @@ public class FoursquareService {
                 .map(venue -> {
                     Venue fVenue = new Venue(venue);
                     fVenue.setType(getVenueType(venue, foursquareCategoryIds).orElse(null));
-                    fVenue.setBoundingBox(boundingBox);
-                    fVenue.setValid(isValidCompactVenueAddress(venue) && isValidCompactVenueCheckins(venue)
-                            && isValidCompactVenueUsers(venue) && Objects.nonNull(fVenue.getType()));
-
-                    String debugCategoriesStr = Arrays.stream(venue.getCategories())
-                            .map(category -> category.getName() + " - " + category.getId())
-                            .collect(Collectors.joining("|", "[", "]"));
-                    logger.info("Venue: {}, {}, checkins {}, users {}", fVenue.getName(), debugCategoriesStr, fVenue.getCheckinsCount(), fVenue.getUsersCount());
-
+                    if (logger.isDebugEnabled()) {
+                        String debugCategoriesStr = Arrays.stream(venue.getCategories())
+                                .map(category -> category.getName() + " - " + category.getId())
+                                .collect(Collectors.joining("|", "[", "]"));
+                        logger.debug("Venue: {}, {}, checkins {}, users {}", fVenue.getName(), debugCategoriesStr, fVenue.getCheckinsCount(), fVenue.getUsersCount());
+                    }
                     return fVenue;
                 })
                 .collect(Collectors.toList()));
@@ -121,5 +105,22 @@ public class FoursquareService {
             Thread.sleep(3000);
         } catch (InterruptedException ignored) {
         }
+    }
+
+    public boolean isValidVenue(Venue venue) {
+        return isValidCompactVenueAddress(venue) && isValidCompactVenueCheckins(venue)
+                && isValidCompactVenueUsers(venue) && Objects.nonNull(venue.getType());
+    }
+
+    private boolean isValidCompactVenueAddress(Venue venue) {
+        return StringUtils.isEmpty(venue.getAddress()) || Character.isUpperCase(venue.getAddress().charAt(0));
+    }
+
+    private boolean isValidCompactVenueCheckins(Venue venue) {
+        return venue.getCheckinsCount() > MINIMAL_PLACE_CHECKINS_COUNT;
+    }
+
+    private boolean isValidCompactVenueUsers(Venue venue) {
+        return venue.getUsersCount() > MINIMAL_PLACE_USERS;
     }
 }

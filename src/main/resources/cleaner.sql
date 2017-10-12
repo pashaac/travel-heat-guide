@@ -1,7 +1,7 @@
 -- DELETE ALL DATA FROM TABLE
-DELETE FROM bounding_box;
+DELETE FROM venue;
 DELETE FROM city;
 
 -- DELETE TABLE
-DROP TABLE bounding_box;
+DROP TABLE venue;
 DROP TABLE city;

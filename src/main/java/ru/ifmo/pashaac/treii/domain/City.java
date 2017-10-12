@@ -35,9 +35,9 @@ public class City {
     })
     private Marker northEast;
 
-    @JsonManagedReference("city-boundingBox")
+    @JsonManagedReference("city-venue")
     @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BoundingBox> boundingBoxes = new ArrayList<>();
+    private List<Venue> venues = new ArrayList<>();
 
     public City() {
     }
@@ -47,27 +47,51 @@ public class City {
         this.country = country;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getCity() {
         return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getCountry() {
         return country;
     }
 
-    public Marker getSouthWest() {
-        return southWest;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public Marker getNorthEast() {
-        return northEast;
+    public Marker getSouthWest() {
+        return southWest;
     }
 
     public void setSouthWest(Marker southWest) {
         this.southWest = southWest;
     }
 
+    public Marker getNorthEast() {
+        return northEast;
+    }
+
     public void setNorthEast(Marker northEast) {
         this.northEast = northEast;
+    }
+
+    public List<Venue> getVenues() {
+        return venues;
+    }
+
+    public void setVenues(List<Venue> venues) {
+        this.venues = venues;
     }
 }

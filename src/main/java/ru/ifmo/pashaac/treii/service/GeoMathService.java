@@ -4,7 +4,7 @@ import com.grum.geocalc.DegreeCoordinate;
 import com.grum.geocalc.EarthCalc;
 import com.grum.geocalc.Point;
 import org.springframework.stereotype.Service;
-import ru.ifmo.pashaac.treii.domain.BoundingBox;
+import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
 import ru.ifmo.pashaac.treii.domain.vo.Marker;
 
 /**
@@ -48,11 +48,11 @@ public class GeoMathService {
                 (box.getNorthEast().getLongitude() + box.getSouthWest().getLongitude()) / 2);
     }
 
-    private Point point(double lat, double lng) {
+    public Point point(double lat, double lng) {
         return new Point(new DegreeCoordinate(lat), new DegreeCoordinate(lng));
     }
 
-    private Point point(Marker marker) {
+    public Point point(Marker marker) {
         return point(marker.getLatitude(), marker.getLongitude());
     }
 }

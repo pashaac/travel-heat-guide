@@ -2,7 +2,7 @@ package ru.ifmo.pashaac.treii.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import fi.foyt.foursquare.api.entities.CompactVenue;
-import ru.ifmo.pashaac.treii.domain.foursquare.FoursquarePlaceType;
+import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
 import ru.ifmo.pashaac.treii.domain.vo.Marker;
 
 import javax.persistence.*;
@@ -28,18 +28,15 @@ public class Venue {
     })
     private Marker location;
     @Enumerated(value = EnumType.STRING)
-    private FoursquarePlaceType type;
+    private PlaceType type;
     private String address;
 
     private long checkinsCount;
     private long usersCount;
 
-    @JsonBackReference("boundingBox-venue")
-    @ManyToOne(targetEntity = BoundingBox.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
-    private BoundingBox boundingBox;
-
-    @Transient
-    private boolean valid;
+    @JsonBackReference("city-venue")
+    @ManyToOne(targetEntity = City.class, fetch = FetchType.EAGER, optional = false)
+    private City city;
 
     public Venue() {
     }
@@ -53,31 +50,76 @@ public class Venue {
         usersCount = venue.getStats().getUsersCount();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFid() {
+        return fid;
+    }
+
+    public void setFid(String fid) {
+        this.fid = fid;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Marker getLocation() {
+        return location;
+    }
+
+    public void setLocation(Marker location) {
+        this.location = location;
+    }
+
+    public PlaceType getType() {
+        return type;
+    }
+
+    public void setType(PlaceType type) {
+        this.type = type;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public long getCheckinsCount() {
         return checkinsCount;
     }
 
+    public void setCheckinsCount(long checkinsCount) {
+        this.checkinsCount = checkinsCount;
+    }
+
     public long getUsersCount() {
         return usersCount;
     }
 
-    public FoursquarePlaceType getType() {
-        return type;
+    public void setUsersCount(long usersCount) {
+        this.usersCount = usersCount;
     }
 
-    public void setType(FoursquarePlaceType type) {
-        this.type = type;
+    public City getCity() {
+        return city;
     }
 
-    public void setBoundingBox(BoundingBox boundingBox) {
-        this.boundingBox = boundingBox;
+    public void setCity(City city) {
+        this.city = city;
     }
 
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
 }

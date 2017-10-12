@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  * Created by Pavel Asadchiy
  * on 22:15 10.10.17.
  */
-public enum FoursquarePlaceType {
+public enum PlaceType {
 
     MUSEUM(Stream.of(
             "4bf58dd8d48988d181941735",
@@ -70,13 +70,14 @@ public enum FoursquarePlaceType {
             "4bf58dd8d48988d1d6941735",
             "4bf58dd8d48988d17c941735").collect(Collectors.joining(",")));
 
-    private static final List<FoursquarePlaceType> nightLifeSpots = Collections.singletonList(NIGHTLIFE_SPOT);
-    private static final List<FoursquarePlaceType> attractions = Arrays.asList(MUSEUM, ART, PARK, PLAZA, SCULPTURE_GARDEN,
-            SPIRTUAL_CENTER, THEATER, FOUNTAIN, GARDEN, PALACE, CASTLE);
+    private static final List<PlaceType> nightLifeSpots = Collections.singletonList(NIGHTLIFE_SPOT);
+//    private static final List<PlaceType> attractions = Arrays.asList(MUSEUM, ART, PARK, PLAZA, SCULPTURE_GARDEN,
+//            SPIRTUAL_CENTER, THEATER, FOUNTAIN, GARDEN, PALACE, CASTLE);
+    private static final List<PlaceType> attractions = Collections.singletonList(CASTLE);
 
     private final String categoryIds;
 
-    FoursquarePlaceType(final String categoryIds) {
+    PlaceType(final String categoryIds) {
         this.categoryIds = categoryIds;
     }
 
@@ -84,15 +85,15 @@ public enum FoursquarePlaceType {
         return categoryIds;
     }
 
-    public static List<FoursquarePlaceType> getNightLifeSpots() {
+    public static List<PlaceType> getNightLifeSpots() {
         return nightLifeSpots;
     }
 
-    public static List<FoursquarePlaceType> getAttractions() {
+    public static List<PlaceType> getAttractions() {
         return attractions;
     }
 
-    public static Optional<FoursquarePlaceType> of(String categoryId) {
+    public static Optional<PlaceType> of(String categoryId) {
         return Arrays.stream(values())
                 .filter(fPlaceType -> fPlaceType.categoryIds.contains(categoryId))
                 .findAny();
