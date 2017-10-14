@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.pashaac.treii.domain.Venue;
 import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
+import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
 import ru.ifmo.pashaac.treii.service.CityService;
 import ru.ifmo.pashaac.treii.service.GeolocationService;
 import ru.ifmo.pashaac.treii.service.VenueService;
@@ -25,7 +26,7 @@ public class AttractionController extends DataController {
         super(cityService, venueService, quadTreeMinerService, geolocationService);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Venue> attractions(@RequestParam double lat, @RequestParam double lng) {
         return data(lat, lng, PlaceType.getAttractions());
     }
@@ -39,6 +40,11 @@ public class AttractionController extends DataController {
     @RequestMapping(value = "/remove", method = RequestMethod.GET)
     public void attractionsRemove(@RequestParam double lat, @RequestParam double lng) {
         data_remove(lat, lng, PlaceType.getAttractions());
+    }
+
+    @RequestMapping(value = "/boundingbox", method = RequestMethod.GET)
+    public List<BoundingBox> attractionsBoundingBoxes(@RequestParam double lat, @RequestParam double lng) {
+        return data_boundingBoxes(lat, lng, PlaceType.getAttractions());
     }
 
 }

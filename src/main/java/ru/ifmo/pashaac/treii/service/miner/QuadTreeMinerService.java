@@ -77,7 +77,7 @@ public class QuadTreeMinerService {
             logger.info("Was searched: {} foursquare venues, after filtering: {}", boundingBoxAttractions.get().size(), validFoursquareVenues.size());
         }
         logger.info("API called: {} times", apiCallCounter);
-        logger.info("Total attractions: {}", totalAttractionsCount);
+        logger.info("Total venues: {}", totalAttractionsCount);
         logger.info("Venues map was created in time: {} ms", System.currentTimeMillis() - startTime);
         return venues;
     }
@@ -96,12 +96,15 @@ public class QuadTreeMinerService {
                 }
                 if (FoursquareService.VENUE_MAX_SEARCH == boundingBoxVenues) {
                     boxQueue.addAll(boundingBoxService.split(boundingBox));
-                    continue;
+                    break;
                 }
+            }
+            if (boundingBoxVenues < FoursquareService.VENUE_MAX_SEARCH) {
                 boundingBoxes.add(boundingBox);
             }
         }
-        logger.info("BoundingBox map was created in time: {} ms", System.currentTimeMillis() - startTime);
+        logger.info("BoundingBox map with {} boundingboxes was created in time: {} ms", boundingBoxes.size(), System.currentTimeMillis() - startTime);
         return boundingBoxes;
     }
+
 }

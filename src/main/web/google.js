@@ -45,7 +45,7 @@ var googleMarker = function (place, map) {
     return new google.maps.Marker({
         position: {lat: place.location.latitude, lng: place.location.longitude},
         map: map,
-        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + place.attractivenessColor,
+        icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + place.iconColor,
         title: '' + place.name
     })
 };

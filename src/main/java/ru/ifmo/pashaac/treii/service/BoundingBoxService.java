@@ -39,7 +39,7 @@ public class BoundingBoxService {
     }
 
     public boolean contains(BoundingBox boundingBox, Venue venue) {
-        BoundingArea boundingArea = new BoundingArea(geoMathService.point(boundingBox.getSouthWest()), geoMathService.point(boundingBox.getNorthEast()));
+        BoundingArea boundingArea = new BoundingArea(geoMathService.point(boundingBox.getNorthEast()), geoMathService.point(boundingBox.getSouthWest()));
         return boundingArea.isContainedWithin(geoMathService.point(venue.getLocation()));
     }
 

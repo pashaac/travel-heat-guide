@@ -1,6 +1,7 @@
 package ru.ifmo.pashaac.treii.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
 import ru.ifmo.pashaac.treii.domain.vo.Marker;
 
 import javax.persistence.*;
@@ -93,5 +94,9 @@ public class City {
 
     public void setVenues(List<Venue> venues) {
         this.venues = venues;
+    }
+
+    public BoundingBox getBoundingBox() {
+        return new BoundingBox(southWest, northEast);
     }
 }

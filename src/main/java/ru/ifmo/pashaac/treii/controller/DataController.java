@@ -4,7 +4,7 @@ import org.springframework.util.CollectionUtils;
 import ru.ifmo.pashaac.treii.domain.City;
 import ru.ifmo.pashaac.treii.domain.Venue;
 import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
-import ru.ifmo.pashaac.treii.domain.vo.Marker;
+import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
 import ru.ifmo.pashaac.treii.service.CityService;
 import ru.ifmo.pashaac.treii.service.GeolocationService;
 import ru.ifmo.pashaac.treii.service.VenueService;
@@ -12,6 +12,7 @@ import ru.ifmo.pashaac.treii.service.miner.QuadTreeMinerService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Pavel Asadchiy
@@ -48,10 +49,15 @@ public abstract class DataController {
     }
 
     void data_remove(double lat, double lng, List<PlaceType> placeTypes) {
-        City cityGeolocation = geolocationService.geolocation(new Marker(lat, lng));
-        cityService.getCity(cityGeolocation).ifPresent(city -> placeTypes
-                .forEach(placeType -> venueService.removeVenueByCityAndType(city, placeType)));
+        City city = cityService.localization(lat, lng);
+        placeTypes.forEach(placeType -> venueService.removeVenueByCityAndType(city, placeType));
     }
 
-
+    List<BoundingBox> data_boundingBoxes(double lat, double lng, List<PlaceType> placeTypes) {
+        City city = cityService.localization(lat, lng);
+        List<Venue> reverseVenues = city.getVenues().stream()
+                .filter(venue -> placeTypes.contains(venue.getType()))
+                .collect(Collectors.toList());
+        return quadTreeMinerService.reverseMine(city.getBoundingBox(), reverseVenues);
+    }
 }

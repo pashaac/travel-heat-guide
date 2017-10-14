@@ -59,41 +59,42 @@ var mapController = (function ($) {
                     boundingBoxContainer = boundingBoxContainer.concat(drawBoundingBoxes(dataBoundingBox, map));
                     $('.modal-inprogress')[0].active = false;
                 });
-            }
-            if (nighLifeSpotsCheckbox.checked === true) {
+            } else if (nighLifeSpotsCheckbox.checked === true) {
                 var nighLifeSpotsBoundingboxesUrl = createNightLifeSpotBoundingBoxDataUrl('http://localhost:8080');
                 $.get(nighLifeSpotsBoundingboxesUrl, function (dataBoundingBox) {
                     boundingBoxContainer = boundingBoxContainer.concat(drawBoundingBoxes(dataBoundingBox, map));
                     $('.modal-inprogress')[0].active = false;
                 });
+            } else {
+                alert("Check attractions or night life spots checkbox!");
             }
         }
-        var attractivenessCheckbox = document.getElementById("attractiveness-checkbox");
-        if (attractivenessCheckbox.checked === true) {
-            $('.modal-inprogress')[0].active = true;
-            var attractivenessUrl = createMlAttractionDataUrl('http://localhost:8080');
-            $.get(attractivenessUrl, function (dataAttraction) {
-                attractionAreaContainer = drawWeightBoundingBoxes(dataAttraction, map);
-                $('.modal-inprogress')[0].active = false;
-            });
-        }
+        // var attractivenessCheckbox = document.getElementById("attractiveness-checkbox");
+        // if (attractivenessCheckbox.checked === true) {
+        //     $('.modal-inprogress')[0].active = true;
+        //     var attractivenessUrl = createMlAttractionDataUrl('http://localhost:8080');
+        //     $.get(attractivenessUrl, function (dataAttraction) {
+        //         attractionAreaContainer = drawWeightBoundingBoxes(dataAttraction, map);
+        //         $('.modal-inprogress')[0].active = false;
+        //     });
+        // }
     };
 
     var createAttractionDataUrl = function (base) {
-        return base + '/data/attraction?' + $.param(post);
-    };
-    var createNightLifeSpotDataUrl = function (base) {
-        return base + '/data/nightLifeSpot?' + $.param(post);
+        return base + '/attraction?' + $.param(post);
     };
     var createAttractionBoundingBoxDataUrl = function (base) {
-        return base + '/data/attraction/boundingbox?' + $.param(post);
+        return base + '/attraction/boundingbox?' + $.param(post);
+    };
+    var createNightLifeSpotDataUrl = function (base) {
+        return base + '/nightLifeSpot?' + $.param(post);
     };
     var createNightLifeSpotBoundingBoxDataUrl = function (base) {
-        return base + '/data/nightLifeSpot/boundingbox?' + $.param(post);
+        return base + '/nightLifeSpot/boundingbox?' + $.param(post);
     };
-    var createMlAttractionDataUrl = function (base) {
-        return base + '/ml/grid?' + $.param(post);
-    };
+    // var createMlAttractionDataUrl = function (base) {
+    //     return base + '/ml/grid?' + $.param(post);
+    // };
     return {clean: clean, load: load, init: init};
 })(jQuery);
 

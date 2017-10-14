@@ -25,7 +25,7 @@ public class NightLifeSpotsController extends DataController {
         super(cityService, venueService, quadTreeMinerService, geolocationService);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Venue> nightLifeSpots(@RequestParam double lat, @RequestParam double lng) {
         return data(lat, lng, PlaceType.getNightLifeSpots());
     }

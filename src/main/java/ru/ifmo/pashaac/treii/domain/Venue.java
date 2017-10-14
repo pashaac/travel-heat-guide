@@ -1,6 +1,7 @@
 package ru.ifmo.pashaac.treii.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import fi.foyt.foursquare.api.entities.CompactVenue;
 import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
 import ru.ifmo.pashaac.treii.domain.vo.Marker;
@@ -37,6 +38,10 @@ public class Venue {
     @JsonBackReference("city-venue")
     @ManyToOne(targetEntity = City.class, fetch = FetchType.EAGER, optional = false)
     private City city;
+
+    @JsonInclude
+    @Transient
+    private String iconColor = "A2E726";
 
     public Venue() {
     }
@@ -122,4 +127,11 @@ public class Venue {
         this.city = city;
     }
 
+    public String getIconColor() {
+        return iconColor;
+    }
+
+    public void setIconColor(String iconColor) {
+        this.iconColor = iconColor;
+    }
 }

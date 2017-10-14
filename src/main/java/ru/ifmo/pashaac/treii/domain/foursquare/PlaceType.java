@@ -73,7 +73,7 @@ public enum PlaceType {
     private static final List<PlaceType> nightLifeSpots = Collections.singletonList(NIGHTLIFE_SPOT);
 //    private static final List<PlaceType> attractions = Arrays.asList(MUSEUM, ART, PARK, PLAZA, SCULPTURE_GARDEN,
 //            SPIRTUAL_CENTER, THEATER, FOUNTAIN, GARDEN, PALACE, CASTLE);
-    private static final List<PlaceType> attractions = Collections.singletonList(CASTLE);
+    private static final List<PlaceType> attractions = Arrays.asList(ART, CASTLE);
 
     private final String categoryIds;
 
