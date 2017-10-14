@@ -1,9 +1,7 @@
 package ru.ifmo.pashaac.treii.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.ifmo.pashaac.treii.domain.Venue;
 import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
 import ru.ifmo.pashaac.treii.service.CityService;
@@ -17,6 +15,9 @@ import java.util.List;
  * Created by Pavel Asadchiy
  * on 0:06 13.10.17.
  */
+@RestController
+@RequestMapping("/nightLifeSpots")
+@CrossOrigin
 public class NightLifeSpotsController extends DataController {
 
     @Autowired
@@ -26,7 +27,7 @@ public class NightLifeSpotsController extends DataController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Venue> nightLifeSpots(@RequestParam double lat, @RequestParam double lng) {
-        return data(lat, lng, PlaceType.getAttractions());
+        return data(lat, lng, PlaceType.getNightLifeSpots());
     }
 
     @RequestMapping(value = "/force", method = RequestMethod.GET)
@@ -37,7 +38,7 @@ public class NightLifeSpotsController extends DataController {
 
     @RequestMapping(value = "/remove", method = RequestMethod.GET)
     public void nightLifeSpotsRemove(@RequestParam double lat, @RequestParam double lng) {
-        data_remove(lat, lng, PlaceType.getAttractions());
+        data_remove(lat, lng, PlaceType.getNightLifeSpots());
     }
 
 }

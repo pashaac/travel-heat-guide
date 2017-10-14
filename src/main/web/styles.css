@@ -1,0 +1,22 @@
+body, html {
+    font-family: 'Roboto', Arial, sans-serif;
+    height: 100%;
+    margin: 0;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+.control-container {
+    position: absolute;
+    top: 10px;
+    left: 125px;
+    font-size: 11px;
+}
+
+paper-button {
+    text-transform: none;
+    font-weight: bold;
+}

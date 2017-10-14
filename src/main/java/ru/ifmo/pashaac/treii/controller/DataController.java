@@ -24,14 +24,14 @@ public abstract class DataController {
     private final QuadTreeMinerService quadTreeMinerService;
     private final GeolocationService geolocationService;
 
-    protected DataController(CityService cityService, VenueService venueService, QuadTreeMinerService quadTreeMinerService, GeolocationService geolocationService) {
+    DataController(CityService cityService, VenueService venueService, QuadTreeMinerService quadTreeMinerService, GeolocationService geolocationService) {
         this.cityService = cityService;
         this.venueService = venueService;
         this.quadTreeMinerService = quadTreeMinerService;
         this.geolocationService = geolocationService;
     }
 
-    protected List<Venue> data(double lat, double lng, List<PlaceType> placeTypes) {
+    List<Venue> data(double lat, double lng, List<PlaceType> placeTypes) {
         City city = cityService.localization(lat, lng);
         List<PlaceType> placeTypesToMine = new ArrayList<>();
         List<Venue> venues = new ArrayList<>();
@@ -47,7 +47,7 @@ public abstract class DataController {
         return venues;
     }
 
-    protected void data_remove(double lat, double lng, List<PlaceType> placeTypes) {
+    void data_remove(double lat, double lng, List<PlaceType> placeTypes) {
         City cityGeolocation = geolocationService.geolocation(new Marker(lat, lng));
         cityService.getCity(cityGeolocation).ifPresent(city -> placeTypes
                 .forEach(placeType -> venueService.removeVenueByCityAndType(city, placeType)));

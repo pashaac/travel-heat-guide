@@ -1,0 +1,53 @@
+<!doctype html>
+
+<html>
+<head>
+    <title>TravelEstateIntercommunion</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="bower_components/paper-card/paper-card.html">
+    <link rel="import" href="bower_components/paper-input/paper-input.html">
+    <link rel="import" href="bower_components/paper-button/paper-button.html">
+    <link rel="import" href="bower_components/paper-range-slider/paper-range-slider.html">
+    <link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
+    <link rel="import" href="bower_components/iron-label/iron-label.html">
+    <link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
+    <link rel="import" href="bower_components/simple-modal/simple-modal.html">
+    <link rel="import" href="bower_components/paper-checkbox/paper-checkbox.html">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="map.js"></script>
+    <script src="utils.js"></script>
+    <script src="google.js"></script>
+</head>
+
+<simple-modal class="modal-inprogress" no-exit>
+    <span>"Please, wait while we are doing our job..."</span>
+    <paper-spinner active>...</paper-spinner>
+</simple-modal>
+
+<div id="map"></div>
+<div class="control-container">
+    <paper-card class="controls">
+        <paper-checkbox id="attractions-checkbox" checked>Attractions</paper-checkbox>
+        <paper-checkbox id="nightLifeSpots-checkbox" checked>Night life spots</paper-checkbox>
+        <paper-checkbox id="attractiveness-checkbox" checked>Attractiveness</paper-checkbox>
+        <paper-checkbox id="boundingboxes-checkbox">Boundingboxes</paper-checkbox>
+
+        <paper-button onclick="mapController.clean(map);">CLEAN</paper-button>
+        <paper-button onclick="mapController.load(map);">APPLY</paper-button>
+    </paper-card>
+</div>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0bOrpaALYb-6caX32Da5KASA94zAoSik&callback=mapRunner"></script>
+</html>
