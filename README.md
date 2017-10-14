@@ -26,11 +26,12 @@ bower install
 
 Rest call
 
-/attraction?lat={}&lng={}
-/attraction/remove?lat={}&lng={}
-/attraction/force?lat={}&lng={}
+* /attraction?lat={}&lng={}
+* /attraction/remove?lat={}&lng={}
+* /attraction/force?lat={}&lng={}
 
-/nightLifeSpots?lat={}&lng={}
-/nightLifeSpots/remove?lat={}&lng={}
-/nightLifeSpots/force?lat={}&lng={}
+
+* /nightLifeSpots?lat={}&lng={}
+* /nightLifeSpots/remove?lat={}&lng={}
+* /nightLifeSpots/force?lat={}&lng={}
 
