@@ -2,7 +2,7 @@
 
 *Travel and Real estate industries intercommunication*
 
-Backend part
+*Backend part*
 
 1. Install gradle (build system)
 2. install postgresql (https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)
@@ -11,10 +11,9 @@ Backend part
 
 Now you can start backend part like 'gradle bootRun'
 
-UI part
+*UI part*
 
-go to src/main/web (you can find index/main/css and bower.json)
-3 next steps for install NodeJS environment
+3 Go to src/main/web (you can find index/main/css and bower.json) and install NodeJS environment
 
 * sudo apt-get install nodejs
 * sudo apt-get install npm
@@ -23,7 +22,7 @@ go to src/main/web (you can find index/main/css and bower.json)
 
 4 Go to index.html from IDEA and click on browser icon at right-up corner
 
-Rest call
+*Rest call*
 
 * /attraction?lat={}&lng={}
 * /attraction/remove?lat={}&lng={}
