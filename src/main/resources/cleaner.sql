@@ -5,3 +5,6 @@ DELETE FROM city;
 -- DELETE TABLE
 DROP TABLE venue;
 DROP TABLE city;
+
+-- SOME SELECTS
+SELECT type, count(*) FROM venue GROUP BY type;

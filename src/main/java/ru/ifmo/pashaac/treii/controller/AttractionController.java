@@ -6,8 +6,8 @@ import ru.ifmo.pashaac.treii.domain.Venue;
 import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
 import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
 import ru.ifmo.pashaac.treii.service.CityService;
-import ru.ifmo.pashaac.treii.service.GeolocationService;
 import ru.ifmo.pashaac.treii.service.VenueService;
+import ru.ifmo.pashaac.treii.service.data.MachineLearningService;
 import ru.ifmo.pashaac.treii.service.miner.QuadTreeMinerService;
 
 import java.util.List;
@@ -22,8 +22,8 @@ import java.util.List;
 public class AttractionController extends DataController {
 
     @Autowired
-    public AttractionController(CityService cityService, VenueService venueService, QuadTreeMinerService quadTreeMinerService, GeolocationService geolocationService) {
-        super(cityService, venueService, quadTreeMinerService, geolocationService);
+    public AttractionController(CityService cityService, VenueService venueService, QuadTreeMinerService quadTreeMinerService, MachineLearningService machineLearningService) {
+        super(cityService, venueService, quadTreeMinerService, machineLearningService);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -45,6 +45,11 @@ public class AttractionController extends DataController {
     @RequestMapping(value = "/boundingbox", method = RequestMethod.GET)
     public List<BoundingBox> attractionsBoundingBoxes(@RequestParam double lat, @RequestParam double lng) {
         return data_boundingBoxes(lat, lng, PlaceType.getAttractions());
+    }
+
+    @RequestMapping(value = "/grid", method = RequestMethod.GET)
+    public List<BoundingBox> attractionsWeightGrid(@RequestParam double lat, @RequestParam double lng) {
+        return data_grid(lat, lng, PlaceType.getAttractions());
     }
 
 }

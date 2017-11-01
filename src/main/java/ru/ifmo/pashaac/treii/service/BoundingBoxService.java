@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ifmo.pashaac.treii.domain.Venue;
 import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
+import ru.ifmo.pashaac.treii.domain.vo.Marker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Pavel Asadchiy
@@ -41,6 +44,21 @@ public class BoundingBoxService {
     public boolean contains(BoundingBox boundingBox, Venue venue) {
         BoundingArea boundingArea = new BoundingArea(geoMathService.point(boundingBox.getNorthEast()), geoMathService.point(boundingBox.getSouthWest()));
         return boundingArea.isContainedWithin(geoMathService.point(venue.getLocation()));
+    }
+
+    public List<BoundingBox> split(BoundingBox boundingBox, double boundingBoxMaxDiagonal) {
+        if (geoMathService.diagonal(boundingBox) > boundingBoxMaxDiagonal) {
+            return split(boundingBox).stream()
+                    .flatMap(box -> split(box, boundingBoxMaxDiagonal).stream())
+                    .collect(Collectors.toList());
+        }
+        return Collections.singletonList(boundingBox);
+    }
+
+    public double radius(Marker marker, BoundingBox boundingBox) {
+        return Math.max(
+                Math.max(geoMathService.distance(marker, geoMathService.getNorthWest(boundingBox)), geoMathService.distance(marker, geoMathService.getSouthEast(boundingBox))),
+                Math.max(geoMathService.distance(marker, boundingBox.getSouthWest()), geoMathService.distance(marker, boundingBox.getNorthEast())));
     }
 
 }

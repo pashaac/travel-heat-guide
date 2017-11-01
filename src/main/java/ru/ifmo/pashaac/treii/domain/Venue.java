@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import fi.foyt.foursquare.api.entities.CompactVenue;
 import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
+import ru.ifmo.pashaac.treii.domain.vo.Attractiveness;
 import ru.ifmo.pashaac.treii.domain.vo.Marker;
 
 import javax.persistence.*;
@@ -41,14 +42,14 @@ public class Venue {
 
     @JsonInclude
     @Transient
-    private String iconColor = "A2E726";
+    private String iconColor = Attractiveness.MEDIUM.getColor();
 
     public Venue() {
     }
 
     public Venue(CompactVenue venue) {
         location = new Marker(venue.getLocation().getLat(), venue.getLocation().getLng());
-        name = venue.getName();
+        name = venue.getName().replace("[\"\'\n]", "");
         fid = venue.getId();
         address = venue.getLocation().getCity() + ", " + venue.getLocation().getAddress();
         checkinsCount = venue.getStats().getCheckinsCount();

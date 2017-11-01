@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.ifmo.pashaac.treii.domain.Venue;
 import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
 import ru.ifmo.pashaac.treii.service.CityService;
-import ru.ifmo.pashaac.treii.service.GeolocationService;
 import ru.ifmo.pashaac.treii.service.VenueService;
+import ru.ifmo.pashaac.treii.service.data.MachineLearningService;
 import ru.ifmo.pashaac.treii.service.miner.QuadTreeMinerService;
 
 import java.util.List;
@@ -21,8 +21,8 @@ import java.util.List;
 public class NightLifeSpotsController extends DataController {
 
     @Autowired
-    public NightLifeSpotsController(CityService cityService, VenueService venueService, QuadTreeMinerService quadTreeMinerService, GeolocationService geolocationService) {
-        super(cityService, venueService, quadTreeMinerService, geolocationService);
+    public NightLifeSpotsController(CityService cityService, VenueService venueService, QuadTreeMinerService quadTreeMinerService, MachineLearningService machineLearningService) {
+        super(cityService, venueService, quadTreeMinerService, machineLearningService);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)

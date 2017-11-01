@@ -6,8 +6,8 @@ import ru.ifmo.pashaac.treii.domain.Venue;
 import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
 import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
 import ru.ifmo.pashaac.treii.service.CityService;
-import ru.ifmo.pashaac.treii.service.GeolocationService;
 import ru.ifmo.pashaac.treii.service.VenueService;
+import ru.ifmo.pashaac.treii.service.data.MachineLearningService;
 import ru.ifmo.pashaac.treii.service.miner.QuadTreeMinerService;
 
 import java.util.ArrayList;
@@ -23,13 +23,13 @@ public abstract class DataController {
     private final CityService cityService;
     private final VenueService venueService;
     private final QuadTreeMinerService quadTreeMinerService;
-    private final GeolocationService geolocationService;
+    private final MachineLearningService machineLearningService;
 
-    DataController(CityService cityService, VenueService venueService, QuadTreeMinerService quadTreeMinerService, GeolocationService geolocationService) {
+    DataController(CityService cityService, VenueService venueService, QuadTreeMinerService quadTreeMinerService, MachineLearningService machineLearningService) {
         this.cityService = cityService;
         this.venueService = venueService;
         this.quadTreeMinerService = quadTreeMinerService;
-        this.geolocationService = geolocationService;
+        this.machineLearningService = machineLearningService;
     }
 
     List<Venue> data(double lat, double lng, List<PlaceType> placeTypes) {
@@ -58,6 +58,15 @@ public abstract class DataController {
         List<Venue> reverseVenues = city.getVenues().stream()
                 .filter(venue -> placeTypes.contains(venue.getType()))
                 .collect(Collectors.toList());
-        return quadTreeMinerService.reverseMine(city.getBoundingBox(), reverseVenues);
+        // TODO: set last argument like FoursquareService.VENUE_MAX_SEARCH before production :)
+        return quadTreeMinerService.reverseMine(city.getBoundingBox(), reverseVenues, 15);
+    }
+
+    List<BoundingBox> data_grid(double lat, double lng, List<PlaceType> placeTypes) {
+        City city = cityService.localization(lat, lng);
+        List<Venue> venues = city.getVenues().stream()
+                .filter(venue -> placeTypes.contains(venue.getType()))
+                .collect(Collectors.toList());
+        return machineLearningService.calculateCityWeightGrid(city.getBoundingBox(), venues);
     }
 }

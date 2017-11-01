@@ -19,7 +19,7 @@ var googleWeightBoundingBox = function(boundingBox, map) {
         strokeOpacity: 0.75,
         strokeWeight: 0.8,
         fillOpacity: 0.75,
-        fillColor: '#' + boundingBox.label,
+        fillColor: '#' + boundingBox.color,
         map: map,
         bounds: {
             north: boundingBox.northEast.latitude,

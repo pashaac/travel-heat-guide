@@ -32,7 +32,7 @@ public class CityService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<City> getCity(City city) {
+    private Optional<City> getCity(City city) {
         return Optional.ofNullable(cityRepository.findByCityAndCountry(city.getCity(), city.getCountry()));
     }
 

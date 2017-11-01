@@ -41,15 +41,6 @@ var mapController = (function ($) {
                 $('.modal-inprogress')[0].active = false;
             });
         }
-        var nighLifeSpotsCheckbox = document.getElementById("nightLifeSpots-checkbox");
-        if (nighLifeSpotsCheckbox.checked === true) {
-            $('.modal-inprogress')[0].active = true;
-            var nightLifeSpotUrl = createNightLifeSpotDataUrl('http://localhost:8080');
-            $.get(nightLifeSpotUrl, function (dataNightLifeSpots) {
-                markerContainer = markerContainer.concat(drawMarkers(dataNightLifeSpots, map))
-                $('.modal-inprogress')[0].active = false;
-            });
-        }
         var boundingboxesCheckbox = document.getElementById("boundingboxes-checkbox");
         if (boundingboxesCheckbox.checked === true) {
             $('.modal-inprogress')[0].gactive = true;
@@ -59,14 +50,17 @@ var mapController = (function ($) {
                     boundingBoxContainer = boundingBoxContainer.concat(drawBoundingBoxes(dataBoundingBox, map));
                     $('.modal-inprogress')[0].active = false;
                 });
-            } else if (nighLifeSpotsCheckbox.checked === true) {
-                var nighLifeSpotsBoundingboxesUrl = createNightLifeSpotBoundingBoxDataUrl('http://localhost:8080');
-                $.get(nighLifeSpotsBoundingboxesUrl, function (dataBoundingBox) {
-                    boundingBoxContainer = boundingBoxContainer.concat(drawBoundingBoxes(dataBoundingBox, map));
+            }
+        }
+        var gridCheckbox = document.getElementById("grid-checkbox");
+        if (gridCheckbox.checked === true) {
+            $('.modal-inprogress')[0].gactive = true;
+            if (attractionsCheckbox.checked === true) {
+                var attractionGridUrl = createAttractionGridDataUrl('http://localhost:8080');
+                $.get(attractionGridUrl , function (dataBoundingBox) {
+                    boundingBoxContainer = boundingBoxContainer.concat(drawWeightBoundingBoxes(dataBoundingBox, map));
                     $('.modal-inprogress')[0].active = false;
                 });
-            } else {
-                alert("Check attractions or night life spots checkbox!");
             }
         }
         // var attractivenessCheckbox = document.getElementById("attractiveness-checkbox");
@@ -83,15 +77,18 @@ var mapController = (function ($) {
     var createAttractionDataUrl = function (base) {
         return base + '/attraction?' + $.param(post);
     };
+    var createAttractionGridDataUrl = function (base) {
+        return base + '/attraction/grid?' + $.param(post);
+    };
     var createAttractionBoundingBoxDataUrl = function (base) {
         return base + '/attraction/boundingbox?' + $.param(post);
     };
-    var createNightLifeSpotDataUrl = function (base) {
-        return base + '/nightLifeSpot?' + $.param(post);
-    };
-    var createNightLifeSpotBoundingBoxDataUrl = function (base) {
-        return base + '/nightLifeSpot/boundingbox?' + $.param(post);
-    };
+    // var createNightLifeSpotDataUrl = function (base) {
+    //     return base + '/nightLifeSpot?' + $.param(post);
+    // };
+    // var createNightLifeSpotBoundingBoxDataUrl = function (base) {
+    //     return base + '/nightLifeSpot/boundingbox?' + $.param(post);
+    // };
     // var createMlAttractionDataUrl = function (base) {
     //     return base + '/ml/grid?' + $.param(post);
     // };

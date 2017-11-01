@@ -71,9 +71,8 @@ public enum PlaceType {
             "4bf58dd8d48988d17c941735").collect(Collectors.joining(",")));
 
     private static final List<PlaceType> nightLifeSpots = Collections.singletonList(NIGHTLIFE_SPOT);
-//    private static final List<PlaceType> attractions = Arrays.asList(MUSEUM, ART, PARK, PLAZA, SCULPTURE_GARDEN,
-//            SPIRTUAL_CENTER, THEATER, FOUNTAIN, GARDEN, PALACE, CASTLE);
-    private static final List<PlaceType> attractions = Arrays.asList(ART, CASTLE);
+    private static final List<PlaceType> attractions = Arrays.asList(MUSEUM, ART, PARK, PLAZA, SCULPTURE_GARDEN,
+            SPIRTUAL_CENTER, THEATER, FOUNTAIN, GARDEN, PALACE, CASTLE);
 
     private final String categoryIds;
 
@@ -97,5 +96,14 @@ public enum PlaceType {
         return Arrays.stream(values())
                 .filter(fPlaceType -> fPlaceType.categoryIds.contains(categoryId))
                 .findAny();
+    }
+
+    public static boolean containsOnlyInArg(String categoryId, String foursquareCategoryIds) {
+        return foursquareCategoryIds.contains(categoryId);
+//      Some improvements, which check that venue contains only in foursquareCategoryIds and not contains in other place types categories
+//        return attractions.stream()
+//                .flatMap(placeType -> Arrays.stream(placeType.getCategoryIds().split(",")))
+//                .filter(placeTypeCategoryId -> !foursquareCategoryIds.contains(placeTypeCategoryId))
+//                .noneMatch(categoryId::equals);
     }
 }

@@ -1,6 +1,9 @@
 package ru.ifmo.pashaac.treii.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 /**
  * Created by Pavel Asadchiy
@@ -11,6 +14,14 @@ public class BoundingBox {
 
     private Marker southWest;
     private Marker northEast;
+
+    @Transient
+    @JsonInclude
+    private Double attractiveness;
+
+    @Transient
+    @JsonInclude
+    private String color;
 
     public BoundingBox() {
     }
@@ -28,4 +39,19 @@ public class BoundingBox {
         return northEast;
     }
 
+    public Double getAttractiveness() {
+        return attractiveness;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setAttractiveness(Double attractiveness) {
+        this.attractiveness = attractiveness;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }

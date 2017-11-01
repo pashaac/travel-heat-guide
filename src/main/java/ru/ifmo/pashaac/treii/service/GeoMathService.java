@@ -24,23 +24,21 @@ public class GeoMathService {
     }
 
     public BoundingBox leftUpBoundingBox(BoundingBox box) {
-        Marker center = center(box);
-        return new BoundingBox(new Marker(center.getLatitude(), box.getSouthWest().getLongitude()), new Marker(box.getNorthEast().getLatitude(), center.getLongitude()));
+        return new BoundingBox(getNorthWest(leftDownBoundingBox(box)), getNorthWest(rightUpBoundingBox(box)));
     }
 
     public BoundingBox leftDownBoundingBox(BoundingBox box) {
         Marker center = center(box);
-        return new BoundingBox(new Marker(box.getSouthWest().getLatitude(), box.getSouthWest().getLongitude()), new Marker(center.getLatitude(), center.getLongitude()));
+        return new BoundingBox(box.getSouthWest(), center);
     }
 
     public BoundingBox rightUpBoundingBox(BoundingBox box) {
         Marker center = center(box);
-        return new BoundingBox(new Marker(center.getLatitude(), center.getLongitude()), new Marker(box.getNorthEast().getLatitude(), box.getNorthEast().getLongitude()));
+        return new BoundingBox(center, box.getNorthEast());
     }
 
     public BoundingBox rightDownBoundingBox(BoundingBox box) {
-        Marker center = center(box);
-        return new BoundingBox(new Marker(box.getSouthWest().getLatitude(), center.getLongitude()), new Marker(center.getLatitude(), box.getNorthEast().getLongitude()));
+        return new BoundingBox(getSouthEast(leftDownBoundingBox(box)), getSouthEast(rightUpBoundingBox(box)));
     }
 
     public Marker center(BoundingBox box) {
@@ -54,5 +52,13 @@ public class GeoMathService {
 
     public Point point(Marker marker) {
         return point(marker.getLatitude(), marker.getLongitude());
+    }
+
+    public Marker getNorthWest(BoundingBox boundingBox) {
+        return new Marker(boundingBox.getNorthEast().getLatitude(), boundingBox.getSouthWest().getLongitude());
+    }
+
+    public Marker getSouthEast(BoundingBox boundingBox) {
+        return new Marker(boundingBox.getSouthWest().getLatitude(), boundingBox.getNorthEast().getLongitude());
     }
 }

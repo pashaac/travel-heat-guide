@@ -51,9 +51,9 @@ public class FoursquareService {
 
     private Optional<PlaceType> getVenueType(CompactVenue venue, String foursquareCategoryIds) {
         return Arrays.stream(venue.getCategories())
-                .filter(category -> foursquareCategoryIds.contains(category.getId()))
+                .filter(category -> PlaceType.containsOnlyInArg(category.getId(), foursquareCategoryIds))
                 .map(category -> PlaceType.of(category.getId()))
-                .filter(Optional::isPresent).map(Optional::get).findAny();
+                .filter(Optional::isPresent).map(Optional::get).findFirst();
     }
 
     public Optional<List<Venue>> search(BoundingBox boundingBox, String foursquareCategoryIds) {

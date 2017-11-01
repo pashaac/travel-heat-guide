@@ -82,7 +82,7 @@ public class QuadTreeMinerService {
         return venues;
     }
 
-    public List<BoundingBox> reverseMine(BoundingBox cityBoundingBox, List<Venue> venues) {
+    public List<BoundingBox> reverseMine(BoundingBox cityBoundingBox, List<Venue> venues, int venuesCountInBox) {
         Queue<BoundingBox> boxQueue = new ArrayDeque<>();
         boxQueue.add(cityBoundingBox);
         List<BoundingBox> boundingBoxes = new ArrayList<>();
@@ -94,12 +94,12 @@ public class QuadTreeMinerService {
                 if (boundingBoxService.contains(boundingBox, venue)) {
                     ++boundingBoxVenues;
                 }
-                if (FoursquareService.VENUE_MAX_SEARCH == boundingBoxVenues) {
+                if (venuesCountInBox == boundingBoxVenues) {
                     boxQueue.addAll(boundingBoxService.split(boundingBox));
                     break;
                 }
             }
-            if (boundingBoxVenues < FoursquareService.VENUE_MAX_SEARCH) {
+            if (boundingBoxVenues < venuesCountInBox) {
                 boundingBoxes.add(boundingBox);
             }
         }
