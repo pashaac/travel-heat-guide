@@ -42,7 +42,7 @@ public class Venue {
 
     @JsonInclude
     @Transient
-    private String iconColor = Attractiveness.MEDIUM.getColor();
+    private String iconColor = Attractiveness.neutralColor();
 
     public Venue() {
     }

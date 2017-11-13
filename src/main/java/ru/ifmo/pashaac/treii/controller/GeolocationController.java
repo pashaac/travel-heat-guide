@@ -1,5 +1,6 @@
 package ru.ifmo.pashaac.treii.controller;
 
+import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import ru.ifmo.pashaac.treii.service.GeolocationService;
  */
 @RestController
 @RequestMapping("/geolocation")
+@ApiModel(value = "Geolocation manager controller", description = "API for work with project 'Geolocation' resources")
 @CrossOrigin
 public class GeolocationController {
 

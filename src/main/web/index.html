@@ -30,23 +30,38 @@
     <script src="google.js"></script>
 </head>
 
-<simple-modal class="modal-inprogress" no-exit>
-    <span>"Please, wait while we are doing our job..."</span>
-    <paper-spinner active>...</paper-spinner>
+<simple-modal class="spinner">
+    <paper-spinner active>Please, wait while we are doing our job...</paper-spinner>
 </simple-modal>
 
-<div id="map"></div>
-<div class="control-container">
-    <paper-card class="controls">
-        <paper-checkbox id="attractions-checkbox" checked>Attractions</paper-checkbox>
-        <!--<paper-checkbox id="nightLifeSpots-checkbox" checked>Night life spots</paper-checkbox>-->
-        <paper-checkbox id="attractiveness-checkbox" checked>Attractiveness</paper-checkbox>
-        <paper-checkbox id="boundingboxes-checkbox">Boundingboxes</paper-checkbox>
-        <paper-checkbox id="grid-checkbox">Grid</paper-checkbox>
+<style is="custom-style">
+    paper-button {
+        background-color: var(--paper-indigo-500);
+        color: white;
+    }
+</style>
 
-        <paper-button onclick="mapController.clean(map);">CLEAN</paper-button>
-        <paper-button onclick="mapController.load(map);">APPLY</paper-button>
-    </paper-card>
+<div id="map"></div>
+<div class="common-content">
+    <paper-button class="custom indigo" onclick="clean(map);">Clean</paper-button>
+</div>
+<div class="attraction-content">
+    <paper-button class="custom indigo" onclick="getAttractionVenues(map);">Attraction venues</paper-button>
+    <paper-button class="custom indigo" onclick="getAttractionVenuesBoundingboxes(map);">Attraction venues (Bounding boxes)</paper-button>
+    <paper-button class="custom indigo" onclick="getAttractionVenuesAttractiveness(map);">Attraction venues (Attractiveness)</paper-button>
+    <paper-button class="custom indigo" onclick="getAttractionVenuesGrid(map);">Attraction venues (Weight Grid)</paper-button>
+</div>
+<div class="nightlife-content">
+    <paper-button class="custom indigo" onclick="getNightlifeVenues(map);">Nightlife venues</paper-button>
+    <paper-button class="custom indigo" onclick="getNightlifeVenuesBoundingboxes(map);">Nightlife venues (Bounding boxes)</paper-button>
+    <paper-button class="custom indigo" onclick="getNightlifeVenuesAttractiveness(map);">Nightlife venues (Attractiveness)</paper-button>
+    <paper-button class="custom indigo" onclick="getNightlifeVenuesGrid(map);">Nightlife venues (Weight Grid)</paper-button>
+</div>
+<div class="yandex-estate-content">
+    <paper-button class="custom indigo" onclick="getYandexEstates(map);">Yandex real estate</paper-button>
+    <paper-button class="custom indigo" onclick="putExportYandexEstates(map);">Yandex real estate (Export)</paper-button>
+    <paper-button class="custom indigo" onclick="getYandexEstatesBoundingboxes(map);">Yandex real estate (Bounding boxes)</paper-button>
+</div>
 </div>
 
 <script async defer

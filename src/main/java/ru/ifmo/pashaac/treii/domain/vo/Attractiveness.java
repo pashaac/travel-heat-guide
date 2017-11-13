@@ -21,4 +21,8 @@ public enum Attractiveness {
     public String getColor() {
         return color;
     }
+
+    public static String neutralColor() {
+        return "CED2BA";
+    }
 }

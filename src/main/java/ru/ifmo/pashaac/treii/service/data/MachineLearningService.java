@@ -1,26 +1,10 @@
 package ru.ifmo.pashaac.treii.service.data;
 
-import de.lmu.ifi.dbs.elki.algorithm.clustering.kmeans.KMeansLloyd;
-import de.lmu.ifi.dbs.elki.algorithm.clustering.kmeans.initialization.RandomlyGeneratedInitialMeans;
-import de.lmu.ifi.dbs.elki.data.Clustering;
-import de.lmu.ifi.dbs.elki.data.NumberVector;
-import de.lmu.ifi.dbs.elki.data.model.KMeansModel;
-import de.lmu.ifi.dbs.elki.data.type.TypeUtil;
-import de.lmu.ifi.dbs.elki.database.Database;
-import de.lmu.ifi.dbs.elki.database.StaticArrayDatabase;
-import de.lmu.ifi.dbs.elki.database.ids.DBIDIter;
-import de.lmu.ifi.dbs.elki.database.ids.DBIDRange;
-import de.lmu.ifi.dbs.elki.database.relation.Relation;
-import de.lmu.ifi.dbs.elki.datasource.ArrayAdapterDatabaseConnection;
-import de.lmu.ifi.dbs.elki.datasource.DatabaseConnection;
-import de.lmu.ifi.dbs.elki.distance.distancefunction.minkowski.SquaredEuclideanDistanceFunction;
-import de.lmu.ifi.dbs.elki.math.random.RandomFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ifmo.pashaac.treii.domain.Venue;
-import ru.ifmo.pashaac.treii.domain.vo.Attractiveness;
 import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
 import ru.ifmo.pashaac.treii.exception.ResourceNotFoundException;
 import ru.ifmo.pashaac.treii.service.BoundingBoxService;
@@ -71,23 +55,23 @@ public class MachineLearningService {
             data[i][0] = boundingBoxes.get(i).getAttractiveness();
             label[i] = "boundingbox#" + i;
         }
-        DatabaseConnection dbc = new ArrayAdapterDatabaseConnection(data, label);
-        Database db = new StaticArrayDatabase(dbc, null);
-        db.initialize();
-        SquaredEuclideanDistanceFunction dist = SquaredEuclideanDistanceFunction.STATIC;
-        RandomlyGeneratedInitialMeans init = new RandomlyGeneratedInitialMeans(RandomFactory.DEFAULT);
-        KMeansLloyd<NumberVector> km = new KMeansLloyd<>(dist, Attractiveness.values().length, 0, init);
-        Clustering<KMeansModel> c = km.run(db);
-        Relation<NumberVector> rel = db.getRelation(TypeUtil.NUMBER_VECTOR_FIELD);
-        DBIDRange ids = (DBIDRange) rel.getDBIDs();
-        for (int i = 0; i < c.getAllClusters().size(); i++) {
-            for (DBIDIter it = c.getAllClusters().get(i).getIDs().iter(); it.valid(); it.advance()) {
-                NumberVector v = rel.get(it);
-                final int offset = ids.getOffset(it);
-                boundingBoxes.get(offset).setColor(Attractiveness.values()[i].getColor());
-                System.out.print(" " + offset);
-            }
-        }
+//        DatabaseConnection dbc = new ArrayAdapterDatabaseConnection(data, label);
+//        Database db = new StaticArrayDatabase(dbc, null);
+//        db.initialize();
+//        SquaredEuclideanDistanceFunction dist = SquaredEuclideanDistanceFunction.STATIC;
+//        RandomlyGeneratedInitialMeans init = new RandomlyGeneratedInitialMeans(RandomFactory.DEFAULT);
+//        KMeansLloyd<NumberVector> km = new KMeansLloyd<>(dist, Attractiveness.values().length, 0, init);
+//        Clustering<KMeansModel> c = km.run(db);
+//        Relation<NumberVector> rel = db.getRelation(TypeUtil.NUMBER_VECTOR_FIELD);
+//        DBIDRange ids = (DBIDRange) rel.getDBIDs();
+//        for (int i = 0; i < c.getAllClusters().size(); i++) {
+//            for (DBIDIter it = c.getAllClusters().get(i).getIDs().iter(); it.valid(); it.advance()) {
+//                NumberVector v = rel.get(it);
+//                final int offset = ids.getOffset(it);
+//                boundingBoxes.get(offset).setColor(Attractiveness.values()[i].getColor());
+//                System.out.print(" " + offset);
+//            }
+//        }
         return boundingBoxes;
     }
 
@@ -96,5 +80,8 @@ public class MachineLearningService {
         return (v, d) ->  Math.max(v.getCheckinsCount() / d, 0.0);
     }
 
+//    public List<Venue> calculateVenueWeights(List<Venue> venues) {
+//        УЬ
+//    }
 
 }

@@ -40,6 +40,10 @@ public class City {
     @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Venue> venues = new ArrayList<>();
 
+    @JsonManagedReference("city-yandex-estate")
+    @OneToMany(mappedBy = "city", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<YandexEstate> yandexEstate = new ArrayList<>();
+
     public City() {
     }
 
@@ -96,7 +100,23 @@ public class City {
         this.venues = venues;
     }
 
+    public List<YandexEstate> getYandexEstate() {
+        return yandexEstate;
+    }
+
+    public void setYandexEstate(List<YandexEstate> yandexEstate) {
+        this.yandexEstate = yandexEstate;
+    }
+
     public BoundingBox getBoundingBox() {
         return new BoundingBox(southWest, northEast);
+    }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 }

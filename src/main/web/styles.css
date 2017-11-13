@@ -9,14 +9,30 @@ body, html {
     width: 100%;
 }
 
-.control-container {
+.common-content {
     position: absolute;
-    top: 10px;
-    left: 125px;
+    top: 45px;
+    left: 7px;
     font-size: 11px;
 }
 
-paper-button {
-    text-transform: none;
-    font-weight: bold;
+.attraction-content {
+    position: absolute;
+    top: 80px;
+    left: 7px;
+    font-size: 11px;
+}
+
+.nightlife-content {
+    position: absolute;
+    top: 115px;
+    left: 7px;
+    font-size: 11px;
+}
+
+.yandex-estate-content {
+    position: absolute;
+    top: 150px;
+    left: 7px;
+    font-size: 11px;
 }

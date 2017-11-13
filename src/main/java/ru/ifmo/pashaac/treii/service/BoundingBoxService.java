@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.ifmo.pashaac.treii.domain.Venue;
 import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
 import ru.ifmo.pashaac.treii.domain.vo.Marker;
 
@@ -41,9 +40,9 @@ public class BoundingBoxService {
         return boundingBoxes;
     }
 
-    public boolean contains(BoundingBox boundingBox, Venue venue) {
+    public boolean contains(BoundingBox boundingBox, Marker point) {
         BoundingArea boundingArea = new BoundingArea(geoMathService.point(boundingBox.getNorthEast()), geoMathService.point(boundingBox.getSouthWest()));
-        return boundingArea.isContainedWithin(geoMathService.point(venue.getLocation()));
+        return boundingArea.isContainedWithin(geoMathService.point(point));
     }
 
     public List<BoundingBox> split(BoundingBox boundingBox, double boundingBoxMaxDiagonal) {

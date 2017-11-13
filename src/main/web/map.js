@@ -1,4 +1,16 @@
-var map, post, user, markerContainer = [], boundingBoxContainer = [], attractionAreaContainer = [];
+var map, post, user;
+
+var attractionVenueContainer = [];
+var nightlifeVenueContainer = [];
+
+var attractionVenueAreaContainer = [];
+var nightlifeVenueAreaContainer = [];
+
+var boundingBoxContainer = [];
+
+var yandexEstateContainer = [];
+
+var prefix = 'http://localhost:8080';
 
 var mapController = (function ($) {
 
@@ -21,81 +33,87 @@ var mapController = (function ($) {
             user.setPosition(e.latLng);
             user.setMap(map);
         });
-        $('.modal-inprogress')[0].active = false;
+        // $('.modal-inprogress')[0].active = false;
     };
 
-    var clean = function () {
-        removeMarkers(markerContainer);
-        removeAttractionAreas(attractionAreaContainer);
-        removeBoundingBoxes(boundingBoxContainer);
-    };
-
-    var load = function (map) {
-        clean();
-        var attractionsCheckbox = document.getElementById("attractions-checkbox");
-        if (attractionsCheckbox.checked === true) {
-            $('.modal-inprogress')[0].active = true;
-            var attractionsUrl = createAttractionDataUrl('http://localhost:8080');
-            $.get(attractionsUrl, function (dataAttraction) {
-                markerContainer = markerContainer.concat(drawMarkers(dataAttraction, map))
-                $('.modal-inprogress')[0].active = false;
-            });
-        }
-        var boundingboxesCheckbox = document.getElementById("boundingboxes-checkbox");
-        if (boundingboxesCheckbox.checked === true) {
-            $('.modal-inprogress')[0].gactive = true;
-            if (attractionsCheckbox.checked === true) {
-                var attractionBoundingboxesUrl = createAttractionBoundingBoxDataUrl('http://localhost:8080');
-                $.get(attractionBoundingboxesUrl, function (dataBoundingBox) {
-                    boundingBoxContainer = boundingBoxContainer.concat(drawBoundingBoxes(dataBoundingBox, map));
-                    $('.modal-inprogress')[0].active = false;
-                });
-            }
-        }
-        var gridCheckbox = document.getElementById("grid-checkbox");
-        if (gridCheckbox.checked === true) {
-            $('.modal-inprogress')[0].gactive = true;
-            if (attractionsCheckbox.checked === true) {
-                var attractionGridUrl = createAttractionGridDataUrl('http://localhost:8080');
-                $.get(attractionGridUrl , function (dataBoundingBox) {
-                    boundingBoxContainer = boundingBoxContainer.concat(drawWeightBoundingBoxes(dataBoundingBox, map));
-                    $('.modal-inprogress')[0].active = false;
-                });
-            }
-        }
-        // var attractivenessCheckbox = document.getElementById("attractiveness-checkbox");
-        // if (attractivenessCheckbox.checked === true) {
-        //     $('.modal-inprogress')[0].active = true;
-        //     var attractivenessUrl = createMlAttractionDataUrl('http://localhost:8080');
-        //     $.get(attractivenessUrl, function (dataAttraction) {
-        //         attractionAreaContainer = drawWeightBoundingBoxes(dataAttraction, map);
-        //         $('.modal-inprogress')[0].active = false;
-        //     });
-        // }
-    };
-
-    var createAttractionDataUrl = function (base) {
-        return base + '/attraction?' + $.param(post);
-    };
-    var createAttractionGridDataUrl = function (base) {
-        return base + '/attraction/grid?' + $.param(post);
-    };
-    var createAttractionBoundingBoxDataUrl = function (base) {
-        return base + '/attraction/boundingbox?' + $.param(post);
-    };
-    // var createNightLifeSpotDataUrl = function (base) {
-    //     return base + '/nightLifeSpot?' + $.param(post);
-    // };
-    // var createNightLifeSpotBoundingBoxDataUrl = function (base) {
-    //     return base + '/nightLifeSpot/boundingbox?' + $.param(post);
-    // };
-    // var createMlAttractionDataUrl = function (base) {
-    //     return base + '/ml/grid?' + $.param(post);
-    // };
-    return {clean: clean, load: load, init: init};
+    return {init: init};
 })(jQuery);
 
-var mapRunner = function () {
+var clean = function () {
+    removeMarkers(attractionVenueContainer);
+    removeMarkers(nightlifeVenueContainer);
+    removeMarkers(yandexEstateContainer);
+
+    removeAttractionAreas(attractionVenueAreaContainer);
+    removeAttractionAreas(nightlifeVenueAreaContainer);
+
+    removeBoundingBoxes(boundingBoxContainer);
+};
+
+var getAttractionVenues = function () {
+    // $('.spinner').active = true;
+    $.get(prefix + '/attraction?' + $.param(post), function (dataAttraction) {
+        attractionVenueContainer = attractionVenueContainer.concat(drawMarkers(dataAttraction, map));
+        // $('.spinner').active = false;
+    });
+};
+
+var getAttractionVenuesBoundingboxes = function () {
+    // $('.spinner').active = true;
+    $.get(prefix + '/attraction/boundingbox?' + $.param(post), function (dataBoundingBox) {
+        boundingBoxContainer = boundingBoxContainer.concat(drawBoundingBoxes(dataBoundingBox, map));
+        // $('.spinner').active = false;
+    });
+};
+
+var getAttractionVenuesGrid = function () {
+    // $('.modal-inprogress')[0].active = true;
+    $.get(prefix + '/attraction/grid?' + $.param(post), function (dataBoundingBox) {
+        boundingBoxContainer = boundingBoxContainer.concat(drawWeightBoundingBoxes(dataBoundingBox, map));
+        // $('.modal-inprogress')[0].active = false;
+    });
+};
+
+var getAttractionVenuesAttractiveness = function () {
+    $.get(prefix + '/attraction/attractiveness?' + $.param(post), function (dataAttraction) {
+        attractionVenueAreaContainer = attractionVenueAreaContainer.concat(drawAttractionArea(dataAttraction, map));
+    });
+};
+
+
+var getNightlifeVenues = function () {
+};
+var getNightlifeVenuesBoundingboxes = function () {
+};
+var getNightlifeVenuesGrid = function () {
+};
+var getNightlifeVenuesAttractiveness = function () {
+};
+
+
+var getYandexEstates = function () {
+    // $('.spinner').active = true;
+    $.get(prefix + '/estate/yandex?' + $.param(post), function (dataYandexEstate) {
+        yandexEstateContainer = yandexEstateContainer.concat(drawYandexEstate(dataYandexEstate, map));
+        // $('.spinner').active = false;
+    });
+};
+
+var getYandexEstatesBoundingboxes = function () {
+    $.get(prefix + '/estate/yandex/boundingbox?' + $.param(post), function (dataYandexEstateBoundingBoxes) {
+        boundingBoxContainer = boundingBoxContainer.concat(drawBoundingBoxes(dataYandexEstateBoundingBoxes, map));
+    });
+};
+
+var putExportYandexEstates = function () {
+    $.ajax({
+        url: prefix + '/estate/yandex/export?' + $.param(post),
+        type: 'PUT'
+    });
+};
+
+
+var mapRunner = function () { // call to google maps callback
     post = {lat: 59.957570, lng: 30.307946};
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (pos) {

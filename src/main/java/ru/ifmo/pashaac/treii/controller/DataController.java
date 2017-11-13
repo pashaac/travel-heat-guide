@@ -5,9 +5,11 @@ import ru.ifmo.pashaac.treii.domain.City;
 import ru.ifmo.pashaac.treii.domain.Venue;
 import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
 import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
+import ru.ifmo.pashaac.treii.domain.vo.Marker;
 import ru.ifmo.pashaac.treii.service.CityService;
 import ru.ifmo.pashaac.treii.service.VenueService;
 import ru.ifmo.pashaac.treii.service.data.MachineLearningService;
+import ru.ifmo.pashaac.treii.service.data.foursquare.FoursquareService;
 import ru.ifmo.pashaac.treii.service.miner.QuadTreeMinerService;
 
 import java.util.ArrayList;
@@ -55,11 +57,11 @@ public abstract class DataController {
 
     List<BoundingBox> data_boundingBoxes(double lat, double lng, List<PlaceType> placeTypes) {
         City city = cityService.localization(lat, lng);
-        List<Venue> reverseVenues = city.getVenues().stream()
+        List<Marker> reverseVenues = city.getVenues().stream()
                 .filter(venue -> placeTypes.contains(venue.getType()))
+                .map(Venue::getLocation)
                 .collect(Collectors.toList());
-        // TODO: set last argument like FoursquareService.VENUE_MAX_SEARCH before production :)
-        return quadTreeMinerService.reverseMine(city.getBoundingBox(), reverseVenues, 15);
+        return quadTreeMinerService.reverseMine(city.getBoundingBox(), reverseVenues, FoursquareService.VENUE_MAX_SEARCH);
     }
 
     List<BoundingBox> data_grid(double lat, double lng, List<PlaceType> placeTypes) {
@@ -68,5 +70,9 @@ public abstract class DataController {
                 .filter(venue -> placeTypes.contains(venue.getType()))
                 .collect(Collectors.toList());
         return machineLearningService.calculateCityWeightGrid(city.getBoundingBox(), venues);
+    }
+
+    List<Venue> data_attractiveness(double lat, double lng, List<PlaceType> placeTypes) {
+        return data(lat, lng, placeTypes); // TODO: fix on normal algorithm
     }
 }

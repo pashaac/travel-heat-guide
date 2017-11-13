@@ -4,11 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import ru.ifmo.pashaac.treii.domain.City;
 import ru.ifmo.pashaac.treii.domain.Venue;
 import ru.ifmo.pashaac.treii.domain.foursquare.PlaceType;
 import ru.ifmo.pashaac.treii.domain.vo.BoundingBox;
+import ru.ifmo.pashaac.treii.domain.vo.Marker;
 import ru.ifmo.pashaac.treii.service.BoundingBoxService;
 import ru.ifmo.pashaac.treii.service.VenueService;
 import ru.ifmo.pashaac.treii.service.data.foursquare.FoursquareService;
@@ -36,6 +38,7 @@ public class QuadTreeMinerService {
         this.venueService = venueService;
     }
 
+    @Transactional
     public List<Venue> mine(City city, List<PlaceType> placeTypes) {
         if (CollectionUtils.isEmpty(placeTypes)) {
             return Collections.emptyList();
@@ -50,7 +53,6 @@ public class QuadTreeMinerService {
         boxQueue.add(new BoundingBox(city.getSouthWest(), city.getNorthEast()));
         int ind = 0;
         int apiCallCounter = 0;
-        int totalAttractionsCount = 0;
         while (!boxQueue.isEmpty()) {
             logger.info("Trying to get places {} for boundingbox #{}...", foursquareReadablePlaceTypes, ind++);
             BoundingBox boundingBox = boxQueue.poll();
@@ -72,35 +74,37 @@ public class QuadTreeMinerService {
                 logger.info("Was searched 0 foursquare places after filtering, skip this boundingbox");
                 continue;
             }
-            totalAttractionsCount += validFoursquareVenues.size();
-            venues.addAll(venueService.save(validFoursquareVenues));
+            venues.addAll(validFoursquareVenues);
             logger.info("Was searched: {} foursquare venues, after filtering: {}", boundingBoxAttractions.get().size(), validFoursquareVenues.size());
         }
-        logger.info("API called: {} times", apiCallCounter);
-        logger.info("Total venues: {}", totalAttractionsCount);
+        logger.info("API called approximately: {} times", apiCallCounter);
+        logger.info("Total venues was searched and saved: {}", venueService.save(venues).size());
         logger.info("Venues map was created in time: {} ms", System.currentTimeMillis() - startTime);
         return venues;
     }
 
-    public List<BoundingBox> reverseMine(BoundingBox cityBoundingBox, List<Venue> venues, int venuesCountInBox) {
+    public List<BoundingBox> reverseMine(BoundingBox cityBoundingBox, List<Marker> places, int venuesCountInBox) {
         Queue<BoundingBox> boxQueue = new ArrayDeque<>();
         boxQueue.add(cityBoundingBox);
         List<BoundingBox> boundingBoxes = new ArrayList<>();
         long startTime = System.currentTimeMillis();
         while (!boxQueue.isEmpty()) {
+            logger.debug("Boundingbox collection size: {}", boundingBoxes.size());
             BoundingBox boundingBox = boxQueue.poll();
-            int boundingBoxVenues = 0;
-            for (Venue venue : venues) {
-                if (boundingBoxService.contains(boundingBox, venue)) {
-                    ++boundingBoxVenues;
+            int boundingBoxPlaces = 0;
+            for (Marker place : places) {
+                if (boundingBoxService.contains(boundingBox, place)) {
+                    ++boundingBoxPlaces;
                 }
-                if (venuesCountInBox == boundingBoxVenues) {
-                    boxQueue.addAll(boundingBoxService.split(boundingBox));
+                if (venuesCountInBox == boundingBoxPlaces) {
                     break;
                 }
             }
-            if (boundingBoxVenues < venuesCountInBox) {
+            if (boundingBoxPlaces < venuesCountInBox) {
                 boundingBoxes.add(boundingBox);
+            }
+            if (boundingBoxPlaces == venuesCountInBox) {
+                boxQueue.addAll(boundingBoxService.split(boundingBox));
             }
         }
         logger.info("BoundingBox map with {} boundingboxes was created in time: {} ms", boundingBoxes.size(), System.currentTimeMillis() - startTime);

@@ -17,6 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/nightLifeSpots")
+@Deprecated // TODO: temporary deprecated due to development / investigation on attractions side
 @CrossOrigin
 public class NightLifeSpotsController extends DataController {
 

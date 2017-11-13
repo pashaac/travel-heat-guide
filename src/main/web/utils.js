@@ -51,6 +51,16 @@ var drawAttractionArea = function (data, map) {
     return attractionCirclesAreas;
 };
 
+var drawYandexEstate = function (data, map) {
+    var yandexEstates = [];
+    _.forEach(data, function (yandexEstate) {
+        yandexEstates.push(googleMarkerYandexEstate(yandexEstate, map));
+    });
+    return yandexEstates;
+};
+
+
+
 var drawGeolocation = function (data, map) {
     var boundingBoxes = [];
     boundingBoxes.push(googleBoundingBox(data.boundingBoxes[0], map));

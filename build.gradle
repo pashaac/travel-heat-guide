@@ -32,8 +32,12 @@ dependencies {
     compile('com.fasterxml.jackson.core:jackson-annotations:2.9.1') // @JsonManagedReference
 
 	compile files('src/main/resources/geocalc.jar')                 // Math on the Earth | https://github.com/grumlimited/geocalc.git
-	compile('de.lmu.ifi.dbs.elki:elki:0.7.1')						// Machine learning
-	compile('de.lmu.ifi.dbs.elki:elki-batik-visualization:0.7.1')	// Visualisation
+	compile('nz.ac.waikato.cms.weka:weka-stable:3.8.1')				// WEKA machine learning
+
+	compile('com.univocity:univocity-parsers:2.5.8')				// To parse .tsv file
+
+    compile('io.springfox:springfox-swagger2:2.7.0')                // Swagger API
+    compile('io.springfox:springfox-swagger-ui:2.7.0')              // Swagger API
 
 	runtime('org.postgresql:postgresql')
 

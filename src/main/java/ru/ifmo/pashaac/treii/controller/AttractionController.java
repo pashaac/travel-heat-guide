@@ -1,5 +1,6 @@
 package ru.ifmo.pashaac.treii.controller;
 
+import io.swagger.annotations.ApiModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.pashaac.treii.domain.Venue;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/attraction")
+@ApiModel(value = "Attraction manager controller", description = "API for work with project 'Attractions' resources")
 @CrossOrigin
 public class AttractionController extends DataController {
 
@@ -50,6 +52,11 @@ public class AttractionController extends DataController {
     @RequestMapping(value = "/grid", method = RequestMethod.GET)
     public List<BoundingBox> attractionsWeightGrid(@RequestParam double lat, @RequestParam double lng) {
         return data_grid(lat, lng, PlaceType.getAttractions());
+    }
+
+    @RequestMapping(value = "/attractiveness", method = RequestMethod.GET)
+    public List<Venue> attractionsAttractiveness(@RequestParam double lat, @RequestParam double lng) {
+        return data_attractiveness(lat, lng, PlaceType.getAttractions());
     }
 
 }

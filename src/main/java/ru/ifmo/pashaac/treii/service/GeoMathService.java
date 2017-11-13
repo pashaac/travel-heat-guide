@@ -14,30 +14,29 @@ import ru.ifmo.pashaac.treii.domain.vo.Marker;
 @Service
 public class GeoMathService {
 
-
     public double distance(Marker location1, Marker location2) {
         return EarthCalc.getVincentyDistance(point(location1), point(location2));
     }
 
-    public double diagonal(BoundingBox box) {
+    double diagonal(BoundingBox box) {
         return distance(box.getSouthWest(), box.getNorthEast());
     }
 
-    public BoundingBox leftUpBoundingBox(BoundingBox box) {
+    BoundingBox leftUpBoundingBox(BoundingBox box) {
         return new BoundingBox(getNorthWest(leftDownBoundingBox(box)), getNorthWest(rightUpBoundingBox(box)));
     }
 
-    public BoundingBox leftDownBoundingBox(BoundingBox box) {
+    BoundingBox leftDownBoundingBox(BoundingBox box) {
         Marker center = center(box);
         return new BoundingBox(box.getSouthWest(), center);
     }
 
-    public BoundingBox rightUpBoundingBox(BoundingBox box) {
+    BoundingBox rightUpBoundingBox(BoundingBox box) {
         Marker center = center(box);
         return new BoundingBox(center, box.getNorthEast());
     }
 
-    public BoundingBox rightDownBoundingBox(BoundingBox box) {
+    BoundingBox rightDownBoundingBox(BoundingBox box) {
         return new BoundingBox(getSouthEast(leftDownBoundingBox(box)), getSouthEast(rightUpBoundingBox(box)));
     }
 
@@ -54,11 +53,11 @@ public class GeoMathService {
         return point(marker.getLatitude(), marker.getLongitude());
     }
 
-    public Marker getNorthWest(BoundingBox boundingBox) {
+    Marker getNorthWest(BoundingBox boundingBox) {
         return new Marker(boundingBox.getNorthEast().getLatitude(), boundingBox.getSouthWest().getLongitude());
     }
 
-    public Marker getSouthEast(BoundingBox boundingBox) {
+    Marker getSouthEast(BoundingBox boundingBox) {
         return new Marker(boundingBox.getSouthWest().getLatitude(), boundingBox.getNorthEast().getLongitude());
     }
 }

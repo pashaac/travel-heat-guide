@@ -19,11 +19,13 @@ public class CityService {
 
     private final CityRepository cityRepository;
     private final GeolocationService geolocationService;
+    private final BoundingBoxService boundingBoxService;
 
     @Autowired
-    public CityService(CityRepository cityRepository, GeolocationService geolocationService) {
+    public CityService(CityRepository cityRepository, GeolocationService geolocationService, BoundingBoxService boundingBoxService) {
         this.cityRepository = cityRepository;
         this.geolocationService = geolocationService;
+        this.boundingBoxService = boundingBoxService;
     }
 
     @Transactional
@@ -34,6 +36,15 @@ public class CityService {
     @Transactional(readOnly = true)
     private Optional<City> getCity(City city) {
         return Optional.ofNullable(cityRepository.findByCityAndCountry(city.getCity(), city.getCountry()));
+    }
+
+    public Optional<City> getCity(String cityName, Marker place) {
+        for (City city : cityRepository.findAll()) {
+            if (city.getCity().equals(cityName) && boundingBoxService.contains(city.getBoundingBox(), place)) {
+                return Optional.of(city);
+            }
+        }
+        return Optional.empty();
     }
 
     public City localization(double lat, double lng) {
