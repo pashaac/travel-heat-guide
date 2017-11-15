@@ -54,7 +54,7 @@ public class QuadTreeMinerService {
         int ind = 0;
         int apiCallCounter = 0;
         while (!boxQueue.isEmpty()) {
-            logger.info("Trying to get places {} for boundingbox #{}...", foursquareReadablePlaceTypes, ind++);
+            logger.debug("Trying to get places {} for boundingbox #{}...", foursquareReadablePlaceTypes, ind++);
             BoundingBox boundingBox = boxQueue.poll();
             Optional<List<Venue>> boundingBoxAttractions = foursquareService.search(boundingBox, foursquareCategoryIds);
             ++apiCallCounter;
@@ -62,7 +62,7 @@ public class QuadTreeMinerService {
                 continue;
             }
             if (FoursquareService.VENUE_MAX_SEARCH == boundingBoxAttractions.get().size()) {
-                logger.info("Split bounding box, because was searched: {} places", FoursquareService.VENUE_MAX_SEARCH);
+                logger.debug("Split bounding box, because was searched: {} places", FoursquareService.VENUE_MAX_SEARCH);
                 boxQueue.addAll(boundingBoxService.split(boundingBox));
                 continue;
             }
@@ -71,7 +71,7 @@ public class QuadTreeMinerService {
                     .peek(attraction -> attraction.setCity(city))
                     .collect(Collectors.toList());
             if (CollectionUtils.isEmpty(validFoursquareVenues)) {
-                logger.info("Was searched 0 foursquare places after filtering, skip this boundingbox");
+                logger.debug("Was searched 0 foursquare places after filtering, skip this boundingbox");
                 continue;
             }
             venues.addAll(validFoursquareVenues);

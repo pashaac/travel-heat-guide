@@ -9,7 +9,21 @@ import java.util.Optional;
  */
 public enum YandexCity {
 
-    SAINT_PETERSBURG("Санкт-Петербург", "Sankt-Peterburg");
+    MOSCOW("Москва", "Moskva"),                             // 12.3 млн
+    SAINT_PETERSBURG("Санкт-Петербург", "Sankt-Peterburg"), // 5.2  млн
+    NOVOSIBIRSK("Новосибирск", "Novosibirsk"),              // 1.6  млн
+    YEKATERINBURG("Екатеринбург", "Yekaterinburg"),         // 1.4  млн
+    NIZHNY_NOVGOROD("Нижний Новгород", "Nizhnij Novgorod"), // 1.2  млн
+    KAZAN("Казань", "Kazan'"),                              // 1.2  млн
+    CHELYABINSK("Челябинск", "Chelyabinsk"),                // 1.2  млн
+    OMSK("Омск", "Omsk"),                                   // 1.1  млн
+    SAMARA("Самара", "Samara"),                             // 1.1  млн
+    ROSTOV_ON_DON("Ростов-на-Дону", "Rostov"),              // 1.1  млн
+    UFA("Уфа", "Ufa"),                                      // 1.1  млн
+    KRASNOYARSK("Красноярск", "Krasnoyarsk"),               // 1.0  млн
+    PERM("Пермь", "Perm'"),                                 // 1.0  млн
+    VORONEZH("Воронеж", "Voronez"),                         // 1.0  млн
+    VOLGOGRAD("Волгоград", "Volgograd");                    // 1.0  млн
 
     private final String yandexCity;
     private final String foursquareCity;
@@ -33,5 +47,9 @@ public enum YandexCity {
 
     public String getFoursquareCity() {
         return foursquareCity;
+    }
+
+    public String getYandexCity() {
+        return yandexCity;
     }
 }

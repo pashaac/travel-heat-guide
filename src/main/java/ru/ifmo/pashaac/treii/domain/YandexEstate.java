@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import ru.ifmo.pashaac.treii.domain.vo.Attractiveness;
 import ru.ifmo.pashaac.treii.domain.vo.Marker;
+import ru.ifmo.pashaac.treii.domain.yandex.EstateAdType;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by Pavel Asadchiy
@@ -36,6 +38,14 @@ public class YandexEstate {
     private long price;
     private String currency;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdated;
+    private Long buildYear;
+
+    @Enumerated(EnumType.STRING)
+    private EstateAdType estateAdType;
+
+    @Column(length = 1024)
     private String additional;
 
     @JsonBackReference("city-yandex-estate")
@@ -108,6 +118,30 @@ public class YandexEstate {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public Long getBuildYear() {
+        return buildYear;
+    }
+
+    public void setBuildYear(Long buildYear) {
+        this.buildYear = buildYear;
+    }
+
+    public EstateAdType getEstateAdType() {
+        return estateAdType;
+    }
+
+    public void setEstateAdType(EstateAdType estateAdType) {
+        this.estateAdType = estateAdType;
     }
 
     public String getAdditional() {
